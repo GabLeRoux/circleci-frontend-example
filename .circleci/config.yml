@@ -79,9 +79,9 @@ jobs:
           command: npm run grunt
       - *attach_workspace
       - persist_to_workspace:
-          root: *workspace_root
+          root: .
           paths:
-            - ~/frontend/dist
+            - dist
 
   release:
     <<: *working_directory
