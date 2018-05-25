@@ -16,12 +16,9 @@ references:
     attach_workspace:
       at: *workspace_root
 
-  restore_repo: &restore_repo
-    restore_cache:
-      keys:
-        - repo-v1-{{ .Branch }}-{{ .Revision }}
-        - repo-v1-{{ .Branch }}
-#        - repo-v1
+  checkout_project: &checkout_project
+    - checkout:
+        path: ~/frontend
 
   restore_deps_node: &restore_deps_node
     restore_cache:
@@ -50,23 +47,12 @@ jobs:
       - run:
           command: git --version
 
-  checkout_code:
-    <<: *docker_image
-    <<: *working_directory
-    steps:
-      - *restore_repo
-      - checkout:
-          path: ~/frontend
-      - save_cache:
-          key: repo-v1-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - .
   build:
     <<: *working_directory
     docker:
       - image: node:10
     steps:
-      - *restore_repo
+      - *checkout_project
       - *restore_deps_node
       - *restore_deps_bower
       - run:
@@ -93,7 +79,7 @@ jobs:
     <<: *working_directory
     <<: *docker_image
     steps:
-      - *restore_repo
+      - *checkout_project
       - *attach_workspace
       - run: ci/release.sh
 
@@ -103,21 +89,13 @@ workflows:
   build_test_deploy:
     jobs:
       - git_version
-      - checkout_code:
-          filters:
-            tags:
-              only:
-                - /.*/
       - build:
-          requires:
-            - checkout_code
           filters:
             tags:
               only:
                 - /.*/
       - release:
           requires:
-            - checkout_code
             - build
           filters:
             tags:
