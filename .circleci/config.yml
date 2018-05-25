@@ -115,4 +115,4 @@ workflows:
           filters:
             tags:
               only:
-                - /^app/v.*/
+                - /^app\/v.*/
