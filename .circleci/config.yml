@@ -98,17 +98,14 @@ workflows:
     jobs:
       - checkout_code:
           filters:
-            tag:
+            tags:
               only:
                 - /.*/
       - build:
           requires:
             - checkout_code
           filters:
-            branch:
-              only:
-                - /.*/
-            tag:
+            tags:
               only:
                 - /.*/
       - release:
@@ -116,6 +113,6 @@ workflows:
             - checkout_code
             - build
           filters:
-            tag:
+            tags:
               only:
                 - /^app/v.*/
