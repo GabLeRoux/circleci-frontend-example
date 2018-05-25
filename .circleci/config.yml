@@ -21,7 +21,7 @@ references:
       keys:
         - repo-v1-{{ .Branch }}-{{ .Revision }}
         - repo-v1-{{ .Branch }}
-        - repo-v1
+#        - repo-v1
 
   restore_deps_node: &restore_deps_node
     restore_cache:
