@@ -3,7 +3,7 @@ version: 2.0
 references:
 
   working_directory: &working_directory
-    working_directory: ~/frontend~/frontend
+    working_directory: ~/frontend
 
   docker_image: &docker_image
     docker:
