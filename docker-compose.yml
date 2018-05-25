@@ -3,11 +3,6 @@ services:
   frontend:
     build: .
     ports:
-      - "4443:14443"
-      - "4444:14444"
+      - "80:80"
     volumes:
-      - .:/frontend
-      - ~/.m2:/root/.m2
-    environment:
-      CIRCLE_FRONTEND_ENV: docker
-      CIRCLE_BACKEND_HOST: "dev.circlehost:8080"
+      - .:/usr/src/app

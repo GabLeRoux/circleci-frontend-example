@@ -1,25 +1,17 @@
-FROM clojure:latest
+FROM node:8
 
-RUN \
-  curl --silent --location https://deb.nodesource.com/setup_0.12 | bash - && \
-  apt-get update && \
-  apt-get install -y haproxy nodejs bzip2 build-essential && \
-  rm -rf /var/lib/apt/lists/*
+WORKDIR /usr/src/app
 
-WORKDIR /frontend
+# install GNU parallel for CI build
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends \
+  parallel \
+  && rm -rf /var/lib/apt/lists/*
 
-ADD project.clj /frontend/project.clj
-RUN lein deps
-
-ADD package.json /frontend/package.json
+COPY package*.json ./
 RUN npm install
+COPY bower.json ./
+RUN npm run bower -- install --allow-root
+COPY . .
 
-ADD . /frontend
-
-EXPOSE 14443
-EXPOSE 14444
-
-ADD docker-entrypoint.sh /docker-entrypoint.sh
-
-ENTRYPOINT ["/docker-entrypoint.sh"]
-CMD ["start"]
+CMD [ "npm", "start" ]
