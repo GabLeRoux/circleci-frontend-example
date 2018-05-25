@@ -96,11 +96,26 @@ workflows:
 
   build_test_deploy:
     jobs:
-      - checkout_code
+      - checkout_code:
+          filter:
+            tag:
+              only:
+                - /.*/
       - build:
           requires:
             - checkout_code
+          filter:
+            branch:
+              only:
+                - /.*/
+            tag:
+              only:
+                - /.*/
       - release:
           requires:
             - checkout_code
             - build
+          filter:
+            tag:
+              only:
+                - /^app/v.*/
