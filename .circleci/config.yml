@@ -44,6 +44,12 @@ references:
     bower-deps-v1-{{ checksum "bower.json" }}
 
 jobs:
+  git_version:
+    <<: *docker_image
+    steps:
+      - run:
+          command: git --version
+
   checkout_code:
     <<: *docker_image
     <<: *working_directory
@@ -96,6 +102,7 @@ workflows:
 
   build_test_deploy:
     jobs:
+      - git_version
       - checkout_code:
           filters:
             tags:
