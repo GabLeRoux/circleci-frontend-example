@@ -30,31 +30,63 @@ references:
 
   deps_node_key: &deps_node_key
     node-deps-v1-{{ checksum "package.json" }}
-  jars_backup_cache_key: &jars_backup_cache_key
-    node-deps-v1
+
+  restore_deps_bower: &restore_deps_bower
+    restore_cache:
+      keys:
+        - deps_bower-v1-{{ .Branch }}-{{ .Revision }}
+        - deps_bower-v1-{{ .Branch }}
+        - deps_bower-v1
+
+  deps_bower_key: &deps_bower_key
+    bower-deps-v1-{{ checksum "bower.json" }}
 
 jobs:
   checkout_code:
     <<: *docker_image
     steps:
       - *restore_repo
-      - *restore_deps_node
       - checkout
       - save_cache:
           key: repo-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - .
-
-  node_dependencies:
-    <<: *docker_image
+  build:
+    docker:
+      - image: node:10
     steps:
       - *restore_repo
+      - *restore_deps_node
+      - *restore_deps_bower
       - run:
-          command: lein deps
+          command: npm i
       - save_cache:
           key: *deps_node_key
           paths:
-            - /root/.m2
+            - node_modules
+      - run:
+          command: npm run bower -- i --allow-root
+      - save_cache:
+          key: *deps_bower_key
+          paths:
+            - bower_components
+      - run:
+          command: npm run grunt
+      - *attach_workspace
+      - persist_to_workspace:
+          root: *workspace_root
+          paths:
+            - ./main.css
+
+  release:
+    <<: *docker_image
+    steps:
+      - *restore_repo
+      - *attach_workspace
+      - run:
+          - echo "circle tag $CIRCLE_TAG"
+          - echo "circle branch $CIRCLE_BRANCH"
+          - cat /tmp/workspace/main.css
 
 workflows:
   version: 2
@@ -62,9 +94,9 @@ workflows:
   build_test_deploy:
     jobs:
       - checkout_code
-      - node_dependencies:
+      - build:
           requires:
             - checkout_code
-      - npm_bower_dependencies:
+      - release:
           requires:
             - checkout_code
