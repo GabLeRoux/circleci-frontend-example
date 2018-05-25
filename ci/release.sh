@@ -11,4 +11,4 @@ else
   cat version.json
 fi
 
-cat main.css
+cat /tmp/workspace/main.css
