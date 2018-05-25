@@ -1,8 +1,24 @@
 {
-  "name": "circle",
-  "version": "0.0.0",
+  "name": "local-grunt-example",
+  "description": "",
+  "main": "index.js",
+  "authors": [
+    "Gabriel Le Breton <lebreton.gabriel@gmail.com>"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/GabLeRoux/local-grunt-example",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
   "dependencies": {
-    "bootstrap": "git://github.com/twbs/bootstrap.git#v3.3.2",
-    "bootstrap3-typeahead": "3.1.0"
+    "font-awesome": "^5.0.13",
+    "bootstrap": "^4.1.1",
+    "jquery": "^3.3.1",
+    "requirejs": "^2.3.5",
+    "angular": "^1.7.0"
   }
 }
