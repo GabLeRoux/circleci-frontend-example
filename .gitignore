@@ -1,5 +1,3 @@
-bower_components
-node_modules
-
-main.css
-main.css.map
+/bower_components
+/node_modules
+/dist
