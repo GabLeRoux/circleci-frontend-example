@@ -2,10 +2,12 @@ version: 2.0
 
 references:
 
+  working_directory: &working_directory
+    working_directory: ~/frontend~/frontend
+
   docker_image: &docker_image
     docker:
       - image: docker:17.05.0-ce-git
-    working_directory: ~/frontend
 
   workspace_root: &workspace_root
     /tmp/workspace
@@ -44,6 +46,7 @@ references:
 jobs:
   checkout_code:
     <<: *docker_image
+    <<: *working_directory
     steps:
       - *restore_repo
       - checkout:
@@ -53,6 +56,7 @@ jobs:
           paths:
             - .
   build:
+    <<: *working_directory
     docker:
       - image: node:10
     steps:
@@ -80,6 +84,7 @@ jobs:
             - ./main.css
 
   release:
+    <<: *working_directory
     <<: *docker_image
     steps:
       - *restore_repo
