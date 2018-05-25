@@ -83,10 +83,7 @@ jobs:
     steps:
       - *restore_repo
       - *attach_workspace
-      - run:
-          - echo "circle tag $CIRCLE_TAG"
-          - echo "circle branch $CIRCLE_BRANCH"
-          - cat /tmp/workspace/main.css
+      - run: ci/release.sh
 
 workflows:
   version: 2
@@ -100,3 +97,4 @@ workflows:
       - release:
           requires:
             - checkout_code
+            - build
