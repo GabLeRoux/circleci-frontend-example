@@ -97,14 +97,14 @@ workflows:
   build_test_deploy:
     jobs:
       - checkout_code:
-          filter:
+          filters:
             tag:
               only:
                 - /.*/
       - build:
           requires:
             - checkout_code
-          filter:
+          filters:
             branch:
               only:
                 - /.*/
@@ -115,7 +115,7 @@ workflows:
           requires:
             - checkout_code
             - build
-          filter:
+          filters:
             tag:
               only:
                 - /^app/v.*/
