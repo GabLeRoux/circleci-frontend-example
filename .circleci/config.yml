@@ -46,7 +46,8 @@ jobs:
     <<: *docker_image
     steps:
       - *restore_repo
-      - checkout
+      - checkout:
+          path: ~/frontend
       - save_cache:
           key: repo-v1-{{ .Branch }}-{{ .Revision }}
           paths:
